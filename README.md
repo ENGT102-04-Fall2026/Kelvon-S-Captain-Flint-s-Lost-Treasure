@@ -1,5 +1,5 @@
 # Captain-Flint-s-Lost-Treasure
-A python program that guides a rover to find Flint's Lost Treasure.
+A Python program that guides a rover to find Flint's Lost Treasure.
 Pseudocode:
 Start Program
 Setup
@@ -54,3 +54,14 @@ ELSE IF clues >= 6:
    Save plot image to "plots/mission_plot.png"
 END PROGRAM
 
+Rover inputs and state (UPDATE)
+Starting variables, x=0, y=0, depth=2, energy=100, hull=100, clues=0, total time=0
+Use the function print() in order to print out all the stats and the clue goal when the program starts running.
+Make a print asking the user for a movement input, so in the y and x direction (x,y)
+Make a counter for time, so time_min+=1
+The formulas for hull loss and energy loss:
+hull_loss=abs(new_depth - prev_depth) * 0.8 * time_min
+energy_loss = (abs(new_depth - prev_depth) * 0.5) + ((distance_m/ time_min) * 1.2) 
+POTENTIAL CHALLENGES:
+Need to make sure that "time_min is greater than 0 to make the formulas mathematically valid when reading the CSV file
+Need to make it able to move in 4 directions along the x and y axes
