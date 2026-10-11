@@ -1,0 +1,78 @@
+grid = [
+    ["open", "open", "blocked", "open"],
+    ["open", "blocked", "open", "open"],
+    ["open", "open", "open", "blocked"],
+    ["blocked", "open", "open", "open"]
+]
+
+x = 0
+y = 0
+
+energy = 100
+hull = 100
+total_time = 0
+
+
+searched = []
+game_over = False
+
+for turn in range(8):
+    if game_over:
+        break
+    
+    print(f"Turn {turn + 1}")
+    print(f"Status: Position: ({x}, {y}), Energy: {energy}, Hull: {hull}, Time: {total_time} mins")
+    
+    direction = input("Direction [F, B, L, R]: ").lower()
+    
+    new_x = x
+    new_y = y
+    
+    if direction == "f":
+        new_y = y + 1
+    
+    if direction == "b":
+        new_y = y - 1
+    
+    if direction == "l":
+        new_x = x - 1
+    
+    if direction == "r":
+        new_x = x + 1
+        
+    if direction not in ["f", "b", "l", "r"]:
+        print("Invalid Input Lost time trying to decide...")
+        total_time += 1
+        
+    if (new_x) < 0 or (new_x) > 3:
+        print("Outside of Grid! Try again")
+        hull -= 25
+        energy -= 10
+        total_time += 2 
+        
+    elif (new_y) < 0 or (new_y) > 3:
+        print("Outside of Grid! Try again")
+        hull -= 25
+        energy -= 10
+        total_time += 2
+        
+    elif grid[new_x][new_y] == "blocked":
+        print("Blocked! Hull took damage, energy wasted, try again...")
+        hull -= 15
+        energy -= 15
+        total_time += 3
+    
+    else:
+        print("Position:", new_x, new_y)
+        x= new_x
+        y= new_y
+        energy -= 5
+        total_time += 5
+    
+    if energy <= 10 or hull <= 10:
+        print("Failure: Rover Enegry or hull dropped to 10% or below!")
+        game_over = True
+        
+    if not game_over:
+        print(f"Trip completed! Final time: {total_time} mins, Remaining Energy: {energy}%, Remaining Hull: {hull}%")
+        
