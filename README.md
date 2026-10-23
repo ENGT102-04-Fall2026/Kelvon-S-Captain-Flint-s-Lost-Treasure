@@ -65,3 +65,38 @@ energy_loss = (abs(new_depth - prev_depth) * 0.5) + ((distance_m/ time_min) * 1.
 POTENTIAL CHALLENGES:
 Need to make sure that "time_min is greater than 0 to make the formulas mathematically valid when reading the CSV file
 Need to make it able to move in 4 directions along the x and y axes
+
+Engineering notebook design update 4: 
+Objective: 
+This module loads spatial mission data from mission_training.csv into a coordinate grid to drive an interactive rover navigation loop. It processes user movement inputs to update operational telemetry—such as energy, hull health, and elapsed time—based on depth differentials and speed. It also includes an interactive search prompt that uses a clue/hazard dictionary (SEARCH_EFFECTS) to apply penalties, track clue progress, or trigger victory when the player finds the primary objective.
+Progress:
+The script successfully parses mission_training.csv to map coordinate data into a localized grid dictionary containing depth, distance, and time metrics. It establishes a 12-turn interactive navigation loop that tracks key telemetry—such as energy, hull integrity, time, and clue points—while applying physics penalties for speed and depth changes. Additionally, it integrates a search system using the SEARCH_EFFECTS dictionary to apply health penalties, accumulate clue progress, and handle win or loss conditions.
+Testing evidence: 
+Turn 1
+Status: Position: (0, 0), Energy: 100, Hull: 100, Time: 0 mins
+Direction [F, B, L, R]: f
+Position: 0 1
+Search this spot? (y/n): y
+Found [Low Hazard]: 'Thin weeds brush the rover frame'
+Turn 2
+Status: Position: (0, 1), Energy: 89.47272727272727, Hull: 93.592, Time: 2.2 mins
+Direction [F, B, L, R]: r
+Position: 1 1
+Search this spot? (y/n): y
+Found [None]: 'The search area contains ordinary gravel and silt'
+Turn 3
+Status: Position: (1, 1), Energy: 78.20508021390374, Hull: 90.98, Time: 4.75 mins
+Direction [F, B, L, R]: f
+Position: 1 2
+Search this spot? (y/n): y
+Found [None]: 'No mission evidence is visible at this location'
+Turn 4
+Status: Position: (1, 2), Energy: 66.39508021390374, Hull: 88.38000000000001, Time: 6.25 mins
+Direction [F, B, L, R]: r
+Position: 2 2
+Search this spot? (y/n): y
+Found [Low Hazard]: 'A mild current pushes across the search lane'
+Challenges: 
+The primary challenge involves boundary check indexing, where comparing movement to num_cols (max_x + 1) rather than max_x allows the rover to step out of bounds and trigger a KeyError. Furthermore, invalid directional inputs and out-of-bounds attempts still advance the turn state without cleanly resetting the loop step. Addressing these logic gaps requires stricter coordinate checks and immediate turn skips on invalid user actions.
+Next Steps:
+Future work will focus on refactoring the boundary validation conditions (>= num_cols) to completely prevent out-of-bounds matrix errors. Once grid movement is fully stabilized, the team will implement matplotlib.pyplot visualizer functions to plot energy and hull decay across time history. As well as making a program that can provide optimal routes to preserve energy
